@@ -15,15 +15,6 @@ namespace Seneca
         public Author(string Name)
         {
             this.authorName = Name;
-            //if (string.IsNullOrWhiteSpace(Email))
-            //{
-            //    this.Email = Email;
-            //}
-            //else
-            //{
-            //    Console.WriteLine("Email should not have any white Spaces!!!");
-            //}
-
         }
 
         //Public methods
