@@ -32,19 +32,8 @@ namespace Seneca
         //ISBN should be unique
         private int ISBN;
 
-        //Constructor
-        //public Book(string ISBN, string AuthorName, bool isAudio, string publisherName, int year, int numberofPages, int availableCopies)
-        //{
-        //    this.ISBN = Int32.Parse(ISBN);
-        //    Author = new Author(AuthorName);
-        //    this.isAudio = isAudio;
-        //    this.PublisherName = publisherName;
-        //    this.Year = year;
-        //    this.NumberOfPages = numberofPages;
-        //    this.AvailableCopies = availableCopies;
-        //}
-
         //Public Methods
+        #region Public Methods
         //ISBN should be unique
         public string GetISBN()
         {
@@ -97,30 +86,36 @@ namespace Seneca
             book.AvailableCopies = availableCopies;
             return book;
         }
+        #endregion
     }
 
     //Implementing 3 Types of Books
+
+    #region History Class
     public class History : Book
     {
-        //Constructor
-        //public History(string ISBN, string AuthorName, bool isAudio, string publisherName, int year, int numberofPages, int availableCopies)
-        //{
-        //}
-
         //Public Methods
+        #region Public Methods
         public override GenreTypes GetGenre()
         {
             return GenreTypes.History;
         }
+        #endregion
 
     }
+    #endregion
+
+    #region Fiction Class
     public class Fiction : Book
     {
-        List<string> CharactersList = new List<string>();
+        //List<string> CharactersList = new List<string>();
+        List<string> charactersList;
+
         //Constructor
-        //public Fiction(string ISBN, string AuthorName, bool isAudio, string publisherName, int year, int numberofPages, int availableCopies) : base(ISBN, AuthorName, isAudio, publisherName, year, numberofPages, availableCopies)
-        //{
-        //}
+        public Fiction()
+        {
+            charactersList = new List<string>();
+        }
 
         //Public Methods
         public override GenreTypes GetGenre()
@@ -129,26 +124,25 @@ namespace Seneca
         }
         public List<string> GetFictionalCharacters()
         {
-            return CharactersList;
+            return charactersList;
         }
-        public List<string> StoreFictionalCharacter(string CharacterName)
+        public void StoreFictionalCharacter(string characterName)
         {
-            CharactersList.Add(CharacterName);
-            return CharactersList;
+            charactersList.Add(characterName);
         }
     }
+    #endregion
+
+    #region Drama Class
     public class Drama : Book
     {
-        //Constructor
-        //public Drama(string ISBN, string AuthorName, bool isAudio, string publisherName, int year, int numberofPages, int availableCopies) : base(ISBN, AuthorName, isAudio, publisherName, year, numberofPages, availableCopies)
-        //{
-        //}
-
         //Public Methods
         public override GenreTypes GetGenre()
         {
             return GenreTypes.Drama;
         }
     }
+    #endregion
+
 
 }

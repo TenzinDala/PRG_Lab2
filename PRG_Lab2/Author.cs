@@ -9,13 +9,12 @@ namespace Seneca
     public class Author
     {
         //Private Fields
-        private string Name;
-        private string Email;
+        private string authorName;
 
         //Constructor
         public Author(string Name)
         {
-            this.Name = Name;
+            this.authorName = Name;
             //if (string.IsNullOrWhiteSpace(Email))
             //{
             //    this.Email = Email;
@@ -30,11 +29,11 @@ namespace Seneca
         //Public methods
         public string GetName()
         { 
-            return Name;
+            return authorName;
         }
         public string GetAuthor()
         {
-            return Name;
+            return authorName;
         }
     }
 }
