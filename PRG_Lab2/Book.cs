@@ -216,6 +216,12 @@ namespace Seneca
     {
         List<string> charactersList;
 
+        //Constructor
+        public Fiction()
+        {
+            this.charactersList = new List<string>();
+        }
+
         //Public Methods
         public override GenreTypes GetGenre()
         {
