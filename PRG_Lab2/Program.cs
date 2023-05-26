@@ -28,7 +28,7 @@ namespace Seneca
             Console.WriteLine($"\tPublisher's Name is : {book.GetPublisherName()}");
             Console.WriteLine($"\tYear : {book.GetYear()}");
             Console.WriteLine($"\tNumeber of Pages : {book.GetNumberOfPages()}");
-            Console.WriteLine($"\tAvailable Copies : {book.GetAvailableCopies()}");
+            Console.WriteLine($"\tAvailable Copies : {book.GetAvailableCopies()}\n");
 
             //Upcasting to get the Genre Enum Value from the derived class
             Book baseBook = historyBook;
@@ -42,6 +42,17 @@ namespace Seneca
             #endregion
 
             Console.ReadKey();
+
+            //ISBN Check Test
+            #region ISBN Check
+            History ISBNCheck = new History();
+
+            //Book historyBook = history; //Upcasting to use parent's Method
+            //Book book = (Book)history;
+            Book Check = ISBNCheck.CreateBook("1232", "Reverant", "Tenzin Dala", true, "Tenzin", 2000, 2000, 23300);
+            #endregion
+            Console.ReadKey();
+
             //To Check History Class
             #region Checking History Methods
             Console.WriteLine("\t\tInitiating History Class Test\n");
