@@ -13,13 +13,14 @@ namespace Seneca
         //Enum for three different types of Books
         public enum GenreTypes
         {
+            Unknown,
             History,
             Fiction,
             Drama
         }
 
         //Private Fields
-        
+        private string ISBN;
         private string Title;
         private Author Author;
         private bool isAudio;
@@ -28,10 +29,9 @@ namespace Seneca
         private int NumberOfPages;
         private int AvailableCopies;
 
-        //Private static for incrementing ISBN number
-        //Its Static so that all instantiated objects will have the same value for Number number variable
+        //List is Static so that all instantiated objects will have the same value for Number number variable
         //ISBN should be unique
-        private int ISBN;
+        private static List<string> ISBNList = new List<string>();
 
         //Public Methods
         #region Public Methods
@@ -72,17 +72,27 @@ namespace Seneca
         }
         public virtual GenreTypes GetGenre()
         {
-            return GenreTypes.History;
+            return GenreTypes.Unknown;
         }
-        public Book CreateBook(string ISBN,string Title, string AuthorName, bool isAudio, string publisherName, int year, int numberofPages, int availableCopies)
+        public Book CreateBook(string ISBN,string Title, string AuthorName, bool isAudio, string publisherName, int year, int numberOfPages, int availableCopies)
         {
             try 
             {
                 Book book = new Book();
-                book.ISBN = Int32.Parse(ISBN);
+
+                bool checkISBNValue = ISBNCheck(ISBN);
+                if(checkISBNValue)
+                {
+                    book.ISBN = ISBN;
+                    ISBNList.Add(ISBN);
+                }
+                else
+                {
+                    throw new Exception("ISBN already exists!!!");
+                }
 
                 //Title Validation Step
-                bool checkTitleValue = titleCheck(Title);
+                bool checkTitleValue = stringSpecialCharactersCheck(Title);
                 if (checkTitleValue)
                 {
                     book.Title = Title;
@@ -93,8 +103,8 @@ namespace Seneca
                 }
 
                 //Checking Author Name Validation
-                bool authorValidation = authorCheck(AuthorName);
-                if (authorValidation)
+                bool authorValidation = stringSpecialCharactersCheck(AuthorName);
+                if (authorValidation == true)
                 {
                     book.Author = new Author(AuthorName);
                 }
@@ -103,19 +113,20 @@ namespace Seneca
                     throw new Exception("Author Name should only contain Alphabetical Characters!!!");
                 }
 
-                if (isAudio == false | isAudio == true)
+                book.isAudio = isAudio;
+               
+                bool publisherValidation = stringSpecialCharactersCheck(publisherName);
+                if (publisherValidation)
                 {
-                    book.isAudio = isAudio;
+                    book.PublisherName = publisherName;
                 }
                 else
                 {
-                    throw new Exception("Value of Audio should either be true or false!!!");
+                    throw new Exception("Publisher Name should only contain Alphabetical Characters!!!");
                 }
-               
-                book.PublisherName = publisherName;
-                
+
                 //Year Validation Step
-                bool yearCheckValue = yearCheck(year);
+                bool yearCheckValue = validatingNumber(year);
                 if (yearCheckValue)
                 {
                     book.Year = year;
@@ -124,8 +135,26 @@ namespace Seneca
                 {
                     throw new Exception("Value of Year should not be 0 or negative!");
                 }
-                book.NumberOfPages = numberofPages;
-                book.AvailableCopies = availableCopies;
+                bool pagesCheckValue = validatingNumber(numberOfPages);
+                if (pagesCheckValue)
+                {
+                    book.NumberOfPages = numberOfPages;
+                }
+                else
+                {
+                    throw new Exception("Number should not be less than 0 or contain any decimal point!");
+                }
+
+                //Year Validation Step
+                bool copiesCheckValue = validatingNumber(availableCopies);
+                if (copiesCheckValue)
+                {
+                    book.AvailableCopies = availableCopies;
+                }
+                else
+                {
+                    throw new Exception("Number should not be less than 0 or contain any decimal point!");
+                }
                 return book;
                 
             }
@@ -138,19 +167,16 @@ namespace Seneca
 
         }
 
-        #region Validation Methods
-
-        public void ISBNCheck()
-        { 
-        
-        }
-        public bool authorCheck(string author)
+        //Validation Methods
+        public bool ISBNCheck(string isbn)
         {
-            // Specify the pattern to match alphabet characters
-            string pattern = @"^[a-zA-Z]+$"; // Matches one or more alphabet characters
+            return !ISBNList.Contains(isbn);
+        }
+        public bool stringSpecialCharactersCheck(string str)
+        {
+            string pattern = "^[a-zA-Z ]*$"; 
 
-            // Use Regex.IsMatch() to check if the input contains only alphabet characters
-            if (Regex.IsMatch(author, pattern))
+            if (Regex.IsMatch(str, pattern))
             {
                 return true;
             }
@@ -159,26 +185,9 @@ namespace Seneca
                 return false;
             }
         }
-
-        public bool titleCheck(string title)
+        public bool validatingNumber(int number)
         {
-            // Specify the pattern to match alphabet characters
-            string pattern = @"^[a-zA-Z]+$"; // Matches one or more alphabet characters
-
-            // Use Regex.IsMatch() to check if the input contains only alphabet characters
-            if (Regex.IsMatch(title, pattern))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public bool yearCheck(int year)
-        {
-            if (year < 0)
+            if(number < 0 | number.ToString().Contains("."))
             {
                 return false;
             }
@@ -187,24 +196,12 @@ namespace Seneca
                 return true;
             }
         }
-
-        public void pagesCheck()
-        { 
-        
-        }
-        public void copiesCheck()
-        { 
-        
-        }
-
-        #endregion
 
         #endregion
     }
 
     //Implementing 3 Types of Books
 
-    #region History Class
     public class History : Book
     {
         //Public Methods
@@ -214,19 +211,10 @@ namespace Seneca
         }
 
     }
-    #endregion
-
-    #region Fiction Class
+    
     public class Fiction : Book
     {
-        //List<string> CharactersList = new List<string>();
         List<string> charactersList;
-
-        //Constructor
-        public Fiction()
-        {
-            charactersList = new List<string>();
-        }
 
         //Public Methods
         public override GenreTypes GetGenre()
@@ -242,9 +230,7 @@ namespace Seneca
             charactersList.Add(characterName);
         }
     }
-    #endregion
 
-    #region Drama Class
     public class Drama : Book
     {
         //Public Methods
@@ -253,7 +239,4 @@ namespace Seneca
             return GenreTypes.Drama;
         }
     }
-    #endregion
-
-
 }
