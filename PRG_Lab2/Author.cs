@@ -10,6 +10,7 @@ namespace Seneca
     {
         //Private Fields
         private string authorName;
+        private string Email;
 
         //Constructor
         public Author(string Name)
@@ -22,9 +23,9 @@ namespace Seneca
         { 
             return authorName;
         }
-        public string GetAuthor()
+        public string GetEmail()
         {
-            return authorName;
+            return Email;
         }
     }
 }
