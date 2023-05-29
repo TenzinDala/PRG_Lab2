@@ -31,7 +31,7 @@ namespace Seneca
 
         //List is Static so that all instantiated objects will have the same value for Number number variable
         //ISBN should be unique
-        private static List<string> ISBNList = new List<string>();
+        public static List<string> ISBNList = new List<string>();
 
         //Public Methods
         #region Public Methods
@@ -74,16 +74,14 @@ namespace Seneca
         {
             return GenreTypes.Unknown;
         }
-        public Book CreateBook(string ISBN,string Title, string AuthorName, bool isAudio, string publisherName, int year, int numberOfPages, int availableCopies)
+        public bool CreateBook(string ISBN,string Title, Author author, bool isAudio, string publisherName, int year, int numberOfPages, int availableCopies)
         {
             try 
             {
-                Book book = new Book();
-
                 bool checkISBNValue = ISBNCheck(ISBN);
                 if(checkISBNValue)
                 {
-                    book.ISBN = ISBN;
+                    this.ISBN = ISBN;
                     ISBNList.Add(ISBN);
                 }
                 else
@@ -92,44 +90,21 @@ namespace Seneca
                 }
 
                 //Title Validation Step
-                bool checkTitleValue = stringSpecialCharactersCheck(Title);
-                if (checkTitleValue)
-                {
-                    book.Title = Title;
-                }
-                else
-                {
-                    throw new Exception("Title should only contain Alphabetical Characters!!!");
-                }
+                this.Title = Title;
 
-                //Checking Author Name Validation
-                bool authorValidation = stringSpecialCharactersCheck(AuthorName);
-                if (authorValidation == true)
-                {
-                    book.Author = new Author(AuthorName);
-                }
-                else
-                {
-                    throw new Exception("Author Name should only contain Alphabetical Characters!!!");
-                }
+                //Author Input
+                this.Author = Author;
 
-                book.isAudio = isAudio;
-               
-                bool publisherValidation = stringSpecialCharactersCheck(publisherName);
-                if (publisherValidation)
-                {
-                    book.PublisherName = publisherName;
-                }
-                else
-                {
-                    throw new Exception("Publisher Name should only contain Alphabetical Characters!!!");
-                }
+                this.isAudio = isAudio;
+
+                //Publisher Name Input
+                this.PublisherName = publisherName;
 
                 //Year Validation Step
                 bool yearCheckValue = validatingNumber(year);
                 if (yearCheckValue)
                 {
-                    book.Year = year;
+                    this.Year = year;
                 }
                 else
                 {
@@ -138,7 +113,7 @@ namespace Seneca
                 bool pagesCheckValue = validatingNumber(numberOfPages);
                 if (pagesCheckValue)
                 {
-                    book.NumberOfPages = numberOfPages;
+                    this.NumberOfPages = numberOfPages;
                 }
                 else
                 {
@@ -149,21 +124,20 @@ namespace Seneca
                 bool copiesCheckValue = validatingNumber(availableCopies);
                 if (copiesCheckValue)
                 {
-                    book.AvailableCopies = availableCopies;
+                    this.AvailableCopies = availableCopies;
                 }
                 else
                 {
                     throw new Exception("Number should not be less than 0 or contain any decimal point!");
                 }
-                return book;
+                return true;
                 
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                
             }
-            return null;
+            return false;
 
         }
 
