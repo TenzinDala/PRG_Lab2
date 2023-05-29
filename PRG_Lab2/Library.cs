@@ -11,25 +11,79 @@ namespace Seneca
     {
         public List<Book> allBooks { get; set; }
         public static List<string> ISBNList = new List<string>();
+        List<Book> availableBooks = new List<Book>();
+        List<Book> borrowedBooks = new List<Book>();
 
         public bool AddBook(Book book)
         {
-            throw new NotImplementedException();
+            if (book != null)
+            {
+                string isbn = book.GetISBN();
+                if (!ISBNList.Contains(isbn))
+                {
+                    allBooks.Add(book);
+                    ISBNList.Add(isbn);
+                    return true;
+                }
+                else
+                {
+                    Console.WriteLine("Book with ISBN already exists!", isbn);
+                }
+            }
+            else
+            {
+                Console.WriteLine("Cannot add null book.");
+            }
+            return false;
         }
 
         public bool BorrowBook(Book book)
         {
-            throw new NotImplementedException();
+            if (book != null)
+            {
+                if (!book.borrowStatus)
+                {
+                    book.borrowStatus = true;
+                    Console.WriteLine("Book successfully borrowed.");
+                    return true;
+                }
+                else
+                {
+                    Console.WriteLine("Book is already borrowed.");
+                    return false;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Invalid book.");
+                return false;
+            }
         }
 
         public List<Book> BorrowedBooks()
         {
-            throw new NotImplementedException();
+            borrowedBooks = new List<Book>();
+            foreach (Book book in allBooks)
+            {
+                if (book.borrowStatus) // Replace IsBorrowed() with the actual method or property to check the borrowing status
+                {
+                    borrowedBooks.Add(book);
+                }
+            }
+            return borrowedBooks;
+
         }
 
         public List<Book> GetAvailableBookCopies()
         {
-            throw new NotImplementedException();
+            foreach (Book book in allBooks)
+            {
+                if (!book.borrowStatus) // Replace IsBorrowed() with the actual method or property to check the borrowing status
+                {
+                    availableBooks.Add(book);
+                }
+            }
+            return availableBooks;
         }
 
         public bool Initialize(string bookDataFilePath)
@@ -40,7 +94,6 @@ namespace Seneca
                 {
                     bool isFirstRow = true;
                     string Line;
-                    List<string> isbnCheckList = new List<string>();
                     allBooks = new List<Book>(); // Initialize the allBooks list
                     ISBNList.Clear();
 
@@ -159,84 +212,75 @@ namespace Seneca
 
             return columns.ToArray();
         }
-        //public bool Initialize(string bookDataFilePath)
-        //{
-        //    try
-        //    {
-        //        using (StreamReader reader = new StreamReader(bookDataFilePath))
-        //        {
-        //            string line;
-        //            while ((line = reader.ReadLine()) != null)
-        //            {
-        //                string[] columns = line.Split(',');
-
-        //                if (columns.Length >= 3)
-        //                {
-        //                    string isbn = columns[0];
-        //                    ISBNList.Add(isbn);
-        //                    Console.WriteLine(ISBNList.ToString());
-
-        //                    if (ISBNList.Contains(isbn))
-        //                    {
-        //                        continue;
-        //                    }
-
-
-        //                    // Check if a book with the same ISBN already exists in the list
-        //                    //bool isDuplicate = allBooks.Any(b => b.ISBN == isbn);
-        //                    //if (isDuplicate)
-        //                    //{
-        //                    //    // Skip this book with the same ISBN
-        //                    //    continue;
-        //                    //}
-        //                    //Book book = new Book
-        //                    //{
-        //                    //    ISBN = isbn,
-        //                    //    Author = authorName,
-        //                    //    Publisher = publisherName
-        //                    //};
-
-        //                    //// Add the book to the list
-        //                    //books.Add(book);
-
-        //                    // Add the book to the list
-        //                    // Create a new Book object
-
-
-        //                }
-        //            }
-
-
-        //        }
-        //        return true;
-        //    }
-        //    catch(Exception e)
-        //    {
-        //        Console.WriteLine(e.Message);
-        //        return false;
-
-        //    }
-
-        //}
 
         public bool ReturnBook(Book book)
         {
-            throw new NotImplementedException();
+            if (book != null)
+            {
+                if (book.borrowStatus)
+                {
+                    book.borrowStatus = false;
+                    Console.WriteLine("Book successfully returned.");
+                    return true;
+                }
+                else
+                {
+                    Console.WriteLine("Book was never borrowed.");
+                    return false;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Invalid book.");
+                return false;
+            }
         }
 
         public List<Book> SearchBookByAuthorName(string authorName)
         {
-            throw new NotImplementedException();
+            List<Book> authorSearchResults = new List<Book>();
+            string keyWord = authorName.ToLower();
+            foreach (Book book in allBooks)
+            {
+                Author author = book.GetAuthor();
+                string name = author.GetName().ToLower();
+                if (name.Contains(keyWord))
+                {
+                    authorSearchResults.Add(book);
+                }
+            }
+
+            return authorSearchResults;
         }
 
         public List<Book> SearchBookByTitle(string searchKeyword)
         {
-            throw new NotImplementedException();
+            List<Book> searchResults = new List<Book>();
+            string keyWord = searchKeyword.ToLower();
+            foreach (Book book in allBooks)
+            {
+                string title = book.GetTitle().ToLower();
+                if (title.Contains(keyWord))
+                {
+                    searchResults.Add(book);
+                }
+            }
+
+            return searchResults;
         }
 
         public List<Book> SearchBooksByGenre(Book.GenreTypes genreTypes)
         {
-            throw new NotImplementedException();
+            List<Book> genreSearchResults = new List<Book>();
+            foreach (Book book in allBooks)
+            {
+                if (book.GetGenre() == genreTypes)
+                {
+                    genreSearchResults.Add(book);
+                }
+            }
+
+            return genreSearchResults;
         }
     }
     }

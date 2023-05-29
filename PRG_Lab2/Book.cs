@@ -28,10 +28,11 @@ namespace Seneca
         private int Year;
         private int NumberOfPages;
         private int AvailableCopies;
+        public bool borrowStatus = false;
 
         //List is Static so that all instantiated objects will have the same value for Number number variable
         //ISBN should be unique
-        public static List<string> ISBNList = new List<string>();
+        //public static List<string> ISBNList = new List<string>();
 
         //Public Methods
         #region Public Methods
@@ -78,22 +79,13 @@ namespace Seneca
         {
             try 
             {
-                bool checkISBNValue = ISBNCheck(ISBN);
-                if(checkISBNValue)
-                {
-                    this.ISBN = ISBN;
-                    ISBNList.Add(ISBN);
-                }
-                else
-                {
-                    throw new Exception("ISBN already exists!!!");
-                }
+                this.ISBN = ISBN;
 
                 //Title Validation Step
                 this.Title = Title;
 
                 //Author Input
-                this.Author = Author;
+                this.Author = author;
 
                 this.isAudio = isAudio;
 
@@ -142,10 +134,10 @@ namespace Seneca
         }
 
         //Validation Methods
-        public bool ISBNCheck(string isbn)
-        {
-            return !ISBNList.Contains(isbn);
-        }
+        //public bool ISBNCheck(string isbn)
+        //{
+        //    return !ISBNList.Contains(isbn);
+        //}
         public bool stringSpecialCharactersCheck(string str)
         {
             string pattern = "^[a-zA-Z ]*$"; 
