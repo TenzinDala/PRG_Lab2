@@ -13,9 +13,10 @@ namespace Seneca
         private string Email;
 
         //Constructor
-        public Author(string Name)
+        public Author(string Name, string email)
         {
             this.authorName = Name;
+            this.Email = email;
         }
 
         //Public methods
