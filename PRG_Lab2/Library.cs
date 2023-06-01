@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static System.Reflection.Metadata.BlobBuilder;
 
@@ -9,6 +10,8 @@ namespace Seneca
 {
     public class Library : ILibrary
     {
+        public List<string> columnLines { get; set; }
+
         public List<Book> allBooks { get; set; }
         public static List<string> ISBNList = new List<string>();
         List<Book> availableBooks = new List<Book>();
@@ -86,58 +89,144 @@ namespace Seneca
             return availableBooks;
         }
 
+        //#region Intialize_Original
+        //public bool Initialize(string bookDataFilePath)
+        //{
+        //    try
+        //    {
+        //        using (StreamReader reader = new StreamReader(bookDataFilePath))
+        //        {
+        //            bool isFirstRow = true;
+        //            string Line;
+        //            allBooks = new List<Book>(); // Initialize the allBooks list
+        //            ISBNList.Clear();
+
+        //            while ((Line = reader.ReadLine()) != null)
+        //            {
+        //                if (isFirstRow)
+        //                { 
+        //                    isFirstRow = false;
+        //                    continue;
+        //                }
+        //                //string[] columns = Line.Split(',');
+        //                string[] columns = SplitCSVLine(Line);
+        //                //Console.WriteLine(columns[1]);
+        //                // Access the ISBN value (first column)
+        //                if (columns.Length > 0)
+        //                {
+        //                    string isbn = columns[0];
+        //                    string Title = columns[1];
+        //                    string authorName = columns[2];
+        //                    string authorEmail = columns[3];
+
+        //                    bool isAudio = Convert.ToBoolean(columns[4].ToLower());
+        //                    string publisherName = columns[5];
+        //                    string publishingDate = columns[6];
+        //                    DateTime Date = DateTime.Parse(publishingDate);
+        //                    int year = Date.Year;
+        //                    int numberOfPages = Int32.Parse(columns[7]);
+        //                    int availableCopies = Int32.Parse(columns[8]);
+        //                    string Genre = columns[9];
+        //                    string FictionalCharacters = columns[10];
+        //                    Author author = new Author(authorName, authorEmail);
+        //                    if (ISBNList.Contains(isbn))
+        //                    {
+        //                        continue;
+        //                    }
+                            
+
+        //                    Book book = new Book();
+        //                    book.CreateBook(isbn, Title, author, isAudio, publisherName, year, numberOfPages, availableCopies);
+        //                    allBooks.Add(book);
+        //                    ISBNList.Add(isbn);
+
+        //                }
+        //            }
+        //            //Console.WriteLine("This is the Old ISBN");
+        //            //foreach (var isbnOld in isbnCheckList)
+        //            //{
+        //            //    Console.WriteLine(isbnOld.ToString());
+        //            //}
+        //            //List<string> finalISBNCheck = isbnCheckList.Distinct().ToList();
+        //            Console.WriteLine("This is the New ISBN");
+
+        //            foreach (var isbnNew in ISBNList)
+        //            {
+        //                Console.WriteLine(isbnNew.ToString());
+        //            }
+        //            Console.WriteLine("\nAll Books Check !!!\n");
+        //            foreach (var bookTest in allBooks)
+        //            {
+        //                Console.WriteLine("isbn is : "+ bookTest.GetISBN());
+        //                Console.WriteLine("Year is : " + bookTest.GetYear());
+        //                Console.WriteLine("Genre is :" + bookTest.GetGenre());
+        //                Console.WriteLine("Author is : " + bookTest.GetAuthor().GetName());
+        //                Console.WriteLine("AvailableCopies are : " +bookTest.GetAvailableCopies());
+        //                Console.WriteLine("Audio is : " + bookTest.GetisAudio());
+        //            }
+
+
+        //        }
+        //        return true;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Console.WriteLine(e.Message);
+        //        return false;
+        //    }
+        //}
+        //#endregion
+
         public bool Initialize(string bookDataFilePath)
         {
             try
             {
-                using (StreamReader reader = new StreamReader(bookDataFilePath))
-                {
-                    bool isFirstRow = true;
-                    string Line;
+                    columnLines = new List<string>();
+
                     allBooks = new List<Book>(); // Initialize the allBooks list
-                    ISBNList.Clear();
+                    FileManager fileManager = new FileManager();
+                    columnLines = fileManager.ReadFile(bookDataFilePath);
 
-                    while ((Line = reader.ReadLine()) != null)
+
+
+                //Console.WriteLine(columns[1]);
+                // Access the ISBN value (first column)
+
+                foreach (string line in columnLines)
+                {
+
+                    List<string> columns = SplitCSVLine(line);
+                    string isbn = columns[0];
+                    string Title = columns[1];
+                    string authorName = columns[2];
+                    string authorEmail = columns[3];
+
+                    bool isAudio = Convert.ToBoolean(columns[4].ToLower());
+                    string publisherName = columns[5];
+                    string publishingDate = columns[6];
+                    DateTime Date = DateTime.Parse(publishingDate);
+                    int year = Date.Year;
+                    int numberOfPages = Int32.Parse(columns[7]);
+                    int availableCopies = Int32.Parse(columns[8]);
+                    string Genre = columns[9];
+                    string FictionalCharacters = columns[10];
+                    Author author = new Author(authorName, authorEmail);
+                    if (ISBNList.Contains(isbn))
                     {
-                        if (isFirstRow)
-                        { 
-                            isFirstRow = false;
-                            continue;
-                        }
-                        //string[] columns = Line.Split(',');
-                        string[] columns = SplitCSVLine(Line);
-                        //Console.WriteLine(columns[1]);
-                        // Access the ISBN value (first column)
-                        if (columns.Length > 0)
-                        {
-                            string isbn = columns[0];
-                            string Title = columns[1];
-                            string authorName = columns[2];
-                            string authorEmail = columns[3];
-
-                            bool isAudio = Convert.ToBoolean(columns[4].ToLower());
-                            string publisherName = columns[5];
-                            string publishingDate = columns[6];
-                            DateTime Date = DateTime.Parse(publishingDate);
-                            int year = Date.Year;
-                            int numberOfPages = Int32.Parse(columns[7]);
-                            int availableCopies = Int32.Parse(columns[8]);
-                            string Genre = columns[9];
-                            string FictionalCharacters = columns[10];
-                            Author author = new Author(authorName, authorEmail);
-                            if (ISBNList.Contains(isbn))
-                            {
-                                continue;
-                            }
-                            
-
-                            Book book = new Book();
-                            book.CreateBook(isbn, Title, author, isAudio, publisherName, year, numberOfPages, availableCopies);
-                            allBooks.Add(book);
-                            ISBNList.Add(isbn);
-
-                        }
+                        continue;
                     }
+
+
+                    Book book = new Book();
+                    book.CreateBook(isbn, Title, author, isAudio, publisherName, year, numberOfPages, availableCopies);
+                    allBooks.Add(book);
+                    ISBNList.Add(isbn);
+
+
+
+                }
+
+                    
                     //Console.WriteLine("This is the Old ISBN");
                     //foreach (var isbnOld in isbnCheckList)
                     //{
@@ -153,16 +242,14 @@ namespace Seneca
                     Console.WriteLine("\nAll Books Check !!!\n");
                     foreach (var bookTest in allBooks)
                     {
-                        Console.WriteLine("isbn is : "+ bookTest.GetISBN());
+                        Console.WriteLine("isbn is : " + bookTest.GetISBN());
                         Console.WriteLine("Year is : " + bookTest.GetYear());
                         Console.WriteLine("Genre is :" + bookTest.GetGenre());
-                        Console.WriteLine("Author is : " + bookTest.GetAuthor());
-                        Console.WriteLine("AvailableCopies are : " +bookTest.GetAvailableCopies());
+                        Console.WriteLine("Author is : " + bookTest.GetAuthor().GetName());
+                        Console.WriteLine("AvailableCopies are : " + bookTest.GetAvailableCopies());
                         Console.WriteLine("Audio is : " + bookTest.GetisAudio());
                     }
-
-
-                }
+                
                 return true;
             }
             catch (Exception e)
@@ -171,7 +258,9 @@ namespace Seneca
                 return false;
             }
         }
-        private string[] SplitCSVLine(string line)
+
+
+        private List<string> SplitCSVLine(string line)
         {
             List<string> columns = new List<string>();
             StringBuilder columnBuilder = new StringBuilder();
@@ -196,21 +285,42 @@ namespace Seneca
 
             columns.Add(columnBuilder.ToString().Trim());
 
-            // Combine the columns that belong to the same cell enclosed in quotes
-            if (inQuotes)
-            {
-                int startIndex = columns.Count - 2;
-                int endIndex = columns.Count - 1;
+            // Merge columns that belong to the same cell enclosed in quotes
+            List<string> mergedColumns = new List<string>();
+            StringBuilder mergedColumnBuilder = new StringBuilder();
+            bool mergeInProgress = false;
 
-                if (startIndex >= 0 && endIndex >= 0)
+            foreach (string column in columns)
+            {
+                if (!mergeInProgress && column.StartsWith("\""))
                 {
-                    string combinedValue = string.Join(",", columns.GetRange(startIndex, endIndex - startIndex + 1));
-                    columns.RemoveRange(startIndex, endIndex - startIndex + 1);
-                    columns.Add(combinedValue);
+                    if (column.EndsWith("\""))
+                    {
+                        mergedColumns.Add(column.Trim('\"'));
+                    }
+                    else
+                    {
+                        mergedColumnBuilder.Clear();
+                        mergedColumnBuilder.Append(column.Trim('\"'));
+                        mergeInProgress = true;
+                    }
+                }
+                else if (mergeInProgress)
+                {
+                    mergedColumnBuilder.Append("," + column);
+                    if (column.EndsWith("\""))
+                    {
+                        mergedColumns.Add(mergedColumnBuilder.ToString());
+                        mergeInProgress = false;
+                    }
+                }
+                else
+                {
+                    mergedColumns.Add(column);
                 }
             }
 
-            return columns.ToArray();
+            return mergedColumns;
         }
 
         public bool ReturnBook(Book book)
