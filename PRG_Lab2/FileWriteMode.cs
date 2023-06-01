@@ -4,9 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PRG_Lab2
+namespace Seneca
 {
-    internal class FileWriteMode
+    public class FileWriteMode
     {
+        public enum FileWriteModes
+        {
+            Append,
+            Overwrite
+        }
     }
 }
