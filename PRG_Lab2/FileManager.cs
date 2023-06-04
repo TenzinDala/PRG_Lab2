@@ -12,55 +12,55 @@ namespace Seneca
     {
         //Field/Attributes
 
-        //public List<string> ReadFile(string filePath)
-        //{
-        //    List<string> lines = new List<string>();
-        //    using (StreamReader reader = new StreamReader(filePath))
-        //    {
-        //        bool isFirstRow = true;
-        //        string Line;
-
-        //        while ((Line = reader.ReadLine()) != null)
-        //        {
-        //            if (isFirstRow)
-        //            {
-        //                isFirstRow = false;
-        //                continue;
-        //            }
-        //            //string[] columns = Line.Split(',');
-        //            List<string> columns = SplitCSVLine(Line);
-        //            string formattedLine = string.Join(",", columns);
-        //            lines.Add(formattedLine);
-        //            //Console.WriteLine(columns[1]);
-        //            // Access the ISBN value (first column)
-        //        }
-        //    }
-        //    return lines;
-
-
-        //}
-
         public List<string> ReadFile(string filePath)
         {
             List<string> lines = new List<string>();
-
-            using (TextFieldParser parser = new TextFieldParser(filePath))
+            using (StreamReader reader = new StreamReader(filePath))
             {
-                parser.TextFieldType = FieldType.Delimited;
-                parser.SetDelimiters(",");
-                parser.HasFieldsEnclosedInQuotes = true;
-                parser.ReadLine();
+                bool isFirstRow = true;
+                string Line;
 
-                while (!parser.EndOfData)
+                while ((Line = reader.ReadLine()) != null)
                 {
-                    string[] fields = parser.ReadFields();
-                    string line = string.Join(",", fields);
-                    lines.Add(line);
+                    if (isFirstRow)
+                    {
+                        isFirstRow = false;
+                        continue;
+                    }
+                    //string[] columns = Line.Split(',');
+                    List<string> columns = SplitCSVLine(Line);
+                    string formattedLine = string.Join(",", columns);
+                    lines.Add(formattedLine);
+                    //Console.WriteLine(columns[1]);
+                    // Access the ISBN value (first column)
                 }
             }
-
             return lines;
+
+
         }
+
+        //public List<string> ReadFile(string filePath)
+        //{
+        //    List<string> lines = new List<string>();
+
+        //    using (TextFieldParser parser = new TextFieldParser(filePath))
+        //    {
+        //        parser.TextFieldType = FieldType.Delimited;
+        //        parser.SetDelimiters(",");
+        //        parser.HasFieldsEnclosedInQuotes = true;
+        //        parser.ReadLine();
+
+        //        while (!parser.EndOfData)
+        //        {
+        //            string[] fields = parser.ReadFields();
+        //            string line = string.Join(",", fields);
+        //            lines.Add(line);
+        //        }
+        //    }
+
+        //    return lines;
+        //}
 
         private List<string> SplitCSVLine(string line)
         {
@@ -73,6 +73,7 @@ namespace Seneca
                 if (c == '"')
                 {
                     inQuotes = !inQuotes;
+                    columnBuilder.Append('"');
                 }
                 else if (c == ',' && !inQuotes)
                 {
