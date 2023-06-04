@@ -284,43 +284,44 @@ namespace Seneca
             }
 
             columns.Add(columnBuilder.ToString().Trim());
+            return columns;
 
-            // Merge columns that belong to the same cell enclosed in quotes
-            List<string> mergedColumns = new List<string>();
-            StringBuilder mergedColumnBuilder = new StringBuilder();
-            bool mergeInProgress = false;
+            //// Merge columns that belong to the same cell enclosed in quotes
+            //List<string> mergedColumns = new List<string>();
+            //StringBuilder mergedColumnBuilder = new StringBuilder();
+            //bool mergeInProgress = false;
 
-            foreach (string column in columns)
-            {
-                if (!mergeInProgress && column.StartsWith("\""))
-                {
-                    if (column.EndsWith("\""))
-                    {
-                        mergedColumns.Add(column.Trim('\"'));
-                    }
-                    else
-                    {
-                        mergedColumnBuilder.Clear();
-                        mergedColumnBuilder.Append(column.Trim('\"'));
-                        mergeInProgress = true;
-                    }
-                }
-                else if (mergeInProgress)
-                {
-                    mergedColumnBuilder.Append("," + column);
-                    if (column.EndsWith("\""))
-                    {
-                        mergedColumns.Add(mergedColumnBuilder.ToString());
-                        mergeInProgress = false;
-                    }
-                }
-                else
-                {
-                    mergedColumns.Add(column);
-                }
-            }
+            //foreach (string column in columns)
+            //{
+            //    if (!mergeInProgress && column.StartsWith("\""))
+            //    {
+            //        if (column.EndsWith("\""))
+            //        {
+            //            mergedColumns.Add(column.Trim('\"'));
+            //        }
+            //        else
+            //        {
+            //            mergedColumnBuilder.Clear();
+            //            mergedColumnBuilder.Append(column.Trim('\"'));
+            //            mergeInProgress = true;
+            //        }
+            //    }
+            //    else if (mergeInProgress)
+            //    {
+            //        mergedColumnBuilder.Append("," + column);
+            //        if (column.EndsWith("\""))
+            //        {
+            //            mergedColumns.Add(mergedColumnBuilder.ToString());
+            //            mergeInProgress = false;
+            //        }
+            //    }
+            //    else
+            //    {
+            //        mergedColumns.Add(column);
+            //    }
+            //}
 
-            return mergedColumns;
+            //return mergedColumns;
         }
 
         public bool ReturnBook(Book book)
