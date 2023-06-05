@@ -6,6 +6,7 @@ College    : Seneca College Newnham Campus
 */
 
 using Seneca;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Seneca
 {
@@ -172,6 +173,41 @@ namespace Seneca
                 Console.WriteLine(GenreTypeSearch.GetGenre());
                 Console.WriteLine(GenreTypeSearch.GetISBN());
             }
+            AppDomain.CurrentDomain.ProcessExit += OnProcessExit; // Register the event handler
+
+        }
+
+        //############################## This Section will execute every time the Program Ends ##########################
+
+        static void OnProcessExit(object sender, EventArgs e)
+        {
+            Console.WriteLine("Enter a key to delete the borrowed files!!!");
+            Console.ReadLine(); // Start the Windows Forms application
+
+            //Library testDeleteFile = new Library();
+            //List<Book> borrowed = testDeleteFile.BorrowedBooks();
+            //foreach (var borrow in borrowed)
+            //{
+            //    Console.WriteLine($"{borrow.GetISBN()} ISBN getting Deleted!!!");
+
+            //}
+            List<string> TEXT_NAME = new List<string>();
+            TEXT_NAME.Add("123");
+            TEXT_NAME.Add("125");
+            foreach(string text in TEXT_NAME) 
+            {
+                string filePath = $@"D:\PRG\Lab03\{text}.txt";
+
+
+                FileManager deleteFile = new FileManager();
+                deleteFile.DeleteFile(filePath);
+            }
+
+          
+
+          
+
+
         }
     }
 }

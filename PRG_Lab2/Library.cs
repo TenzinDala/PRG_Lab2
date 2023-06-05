@@ -42,7 +42,8 @@ namespace Seneca
 
         public bool BorrowBook(Book book)
         {
-            string path = @"D:\PRG\Lab03\testingBorrowedBooks.txt";
+            string TEXT_NAME = book.GetISBN();
+            string path = $@"D:\PRG\Lab03\{TEXT_NAME}.txt";
             FileManager textFile = new FileManager();
             FileWriteModes fileWriteModes = new FileWriteModes();
             try
@@ -69,15 +70,24 @@ namespace Seneca
 
         public List<Book> BorrowedBooks()
         {
-            borrowedBooks = new List<Book>();
-            foreach (Book book in allBooks)
+            try
             {
-                if (book.borrowStatus)
+                borrowedBooks = new List<Book>();
+                foreach (Book book in allBooks)
                 {
-                    borrowedBooks.Add(book);
+                    if (book.borrowStatus)
+                    {
+                        borrowedBooks.Add(book);
+                    }
                 }
+                return borrowedBooks;
+
             }
-            return borrowedBooks;
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null; 
+            }
 
         }
 
@@ -85,101 +95,13 @@ namespace Seneca
         {
             foreach (Book book in allBooks)
             {
-                if (!book.borrowStatus) // Replace IsBorrowed() with the actual method or property to check the borrowing status
+                if (!book.borrowStatus)
                 {
                     availableBooks.Add(book);
                 }
             }
             return availableBooks;
         }
-
-        #region Intialize_Original
-        //public bool Initialize(string bookDataFilePath)
-        //{
-        //    try
-        //    {
-        //        using (StreamReader reader = new StreamReader(bookDataFilePath))
-        //        {
-        //            bool isFirstRow = true;
-        //            string Line;
-        //            allBooks = new List<Book>(); // Initialize the allBooks list
-        //            ISBNList.Clear();
-
-        //            while ((Line = reader.ReadLine()) != null)
-        //            {
-        //                if (isFirstRow)
-        //                { 
-        //                    isFirstRow = false;
-        //                    continue;
-        //                }
-        //                //string[] columns = Line.Split(',');
-        //                string[] columns = SplitCSVLine(Line);
-        //                //Console.WriteLine(columns[1]);
-        //                // Access the ISBN value (first column)
-        //                if (columns.Length > 0)
-        //                {
-        //                    string isbn = columns[0];
-        //                    string Title = columns[1];
-        //                    string authorName = columns[2];
-        //                    string authorEmail = columns[3];
-
-        //                    bool isAudio = Convert.ToBoolean(columns[4].ToLower());
-        //                    string publisherName = columns[5];
-        //                    string publishingDate = columns[6];
-        //                    DateTime Date = DateTime.Parse(publishingDate);
-        //                    int year = Date.Year;
-        //                    int numberOfPages = Int32.Parse(columns[7]);
-        //                    int availableCopies = Int32.Parse(columns[8]);
-        //                    string Genre = columns[9];
-        //                    string FictionalCharacters = columns[10];
-        //                    Author author = new Author(authorName, authorEmail);
-        //                    if (ISBNList.Contains(isbn))
-        //                    {
-        //                        continue;
-        //                    }
-                            
-
-        //                    Book book = new Book();
-        //                    book.CreateBook(isbn, Title, author, isAudio, publisherName, year, numberOfPages, availableCopies);
-        //                    allBooks.Add(book);
-        //                    ISBNList.Add(isbn);
-
-        //                }
-        //            }
-        //            //Console.WriteLine("This is the Old ISBN");
-        //            //foreach (var isbnOld in isbnCheckList)
-        //            //{
-        //            //    Console.WriteLine(isbnOld.ToString());
-        //            //}
-        //            //List<string> finalISBNCheck = isbnCheckList.Distinct().ToList();
-        //            Console.WriteLine("This is the New ISBN");
-
-        //            foreach (var isbnNew in ISBNList)
-        //            {
-        //                Console.WriteLine(isbnNew.ToString());
-        //            }
-        //            Console.WriteLine("\nAll Books Check !!!\n");
-        //            foreach (var bookTest in allBooks)
-        //            {
-        //                Console.WriteLine("isbn is : "+ bookTest.GetISBN());
-        //                Console.WriteLine("Year is : " + bookTest.GetYear());
-        //                Console.WriteLine("Genre is :" + bookTest.GetGenre());
-        //                Console.WriteLine("Author is : " + bookTest.GetAuthor().GetName());
-        //                Console.WriteLine("AvailableCopies are : " +bookTest.GetAvailableCopies());
-        //                Console.WriteLine("Audio is : " + bookTest.GetisAudio());
-        //            }
-
-
-        //        }
-        //        return true;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Console.WriteLine(e.Message);
-        //        return false;
-        //    }
-        //}
-        #endregion
 
         public bool Initialize(string bookDataFilePath)
         {
@@ -397,5 +319,6 @@ namespace Seneca
 
             return genreSearchResults;
         }
+        
     }
     }
