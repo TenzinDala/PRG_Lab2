@@ -89,19 +89,19 @@ namespace Seneca
 
             columns.Add(columnBuilder.ToString().Trim());
 
-            // Combine the columns that belong to the same cell enclosed in quotes
-            if (inQuotes)
-            {
-                int startIndex = columns.Count - 2;
-                int endIndex = columns.Count - 1;
+            //// Combine the columns that belong to the same cell enclosed in quotes
+            //if (inQuotes)
+            //{
+            //    int startIndex = columns.Count - 2;
+            //    int endIndex = columns.Count - 1;
 
-                if (startIndex >= 0 && endIndex >= 0)
-                {
-                    string combinedValue = string.Join(",", columns.GetRange(startIndex, endIndex - startIndex + 1));
-                    columns.RemoveRange(startIndex, endIndex - startIndex + 1);
-                    columns.Add(combinedValue);
-                }
-            }
+            //    if (startIndex >= 0 && endIndex >= 0)
+            //    {
+            //        string combinedValue = string.Join(",", columns.GetRange(startIndex, endIndex - startIndex + 1));
+            //        columns.RemoveRange(startIndex, endIndex - startIndex + 1);
+            //        columns.Add(combinedValue);
+            //    }
+            //}
 
             return columns;
         }
@@ -145,7 +145,6 @@ namespace Seneca
             {
                 File.Delete(filePath);
                 return true;
-
             }
             else { return false; }
         }
