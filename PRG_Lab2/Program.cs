@@ -188,6 +188,8 @@ To DO
 7) Will the attributes be already defined?
 
 Q.1. Should we change the return for Author?
+
+Q.2. Where would you like us to create the txt file?
  
 */
 
