@@ -109,26 +109,45 @@ namespace Seneca
 
         public bool WriteFile(string filePath, FileWriteModes fileWriteMode)
         {
-            if(!File.Exists(filePath))
+            DateTime currentDateTime = DateTime.Now;
+            if (!File.Exists(filePath))
             {
-                File.Create(filePath);
-                using (StreamWriter sw = File.CreateText(filePath))
-                {
-                    sw.WriteLine("Hello");
-                    sw.WriteLine("And");
-                    sw.WriteLine("Welcome");
-                }
+                File.Create(filePath).Dispose();
+                File.AppendAllText(filePath, currentDateTime.ToString());
                 return true;
+                //try
+                //{
+                //    using (StreamWriter sw = File.CreateText(filePath))
+                //    {
+                //        sw.WriteLine($"Date And Time");
+                //        sw.WriteLine($"{currentDateTime}");
+                //        sw.WriteLine("Welcome");
+                //    }
+                //    return true;
+                //}
+                //catch (Exception e)
+                //{
+                //    Console.WriteLine(e.Message);
+                //    return false;
+                //}
+
             }
             else
             {
                 Console.WriteLine("File found");
                 return false;
             }
+           
         }
-        //public bool DeleteFile(string filePath)
-        //{
+        public bool DeleteFile(string filePath)
+        {
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+                return true;
 
-        //}
+            }
+            else { return false; }
+        }
     }
 }
