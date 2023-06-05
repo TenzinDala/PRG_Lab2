@@ -19,7 +19,7 @@ namespace Seneca
 
         public bool AddBook(Book book)
         {
-            if (book != null)
+            try
             {
                 string isbn = book.GetISBN();
                 if (!ISBNList.Contains(isbn))
@@ -33,20 +33,24 @@ namespace Seneca
                     Console.WriteLine("Book with ISBN already exists!", isbn);
                 }
             }
-            else
+            catch(Exception e)
             {
-                Console.WriteLine("Cannot add null book.");
+                Console.WriteLine(e.Message);
             }
             return false;
         }
 
         public bool BorrowBook(Book book)
         {
-            if (book != null)
+            string path = @"D:\PRG\Lab03\testingBorrowedBooks.txt";
+            FileManager textFile = new FileManager();
+            FileWriteModes fileWriteModes = new FileWriteModes();
+            try
             {
                 if (!book.borrowStatus)
                 {
                     book.borrowStatus = true;
+                    textFile.WriteFile(path, fileWriteModes);
                     Console.WriteLine("Book successfully borrowed.");
                     return true;
                 }
@@ -56,9 +60,9 @@ namespace Seneca
                     return false;
                 }
             }
-            else
+            catch(Exception e)
             {
-                Console.WriteLine("Invalid book.");
+                Console.WriteLine(e.Message);
                 return false;
             }
         }
@@ -68,7 +72,7 @@ namespace Seneca
             borrowedBooks = new List<Book>();
             foreach (Book book in allBooks)
             {
-                if (book.borrowStatus) // Replace IsBorrowed() with the actual method or property to check the borrowing status
+                if (book.borrowStatus)
                 {
                     borrowedBooks.Add(book);
                 }
@@ -89,7 +93,7 @@ namespace Seneca
             return availableBooks;
         }
 
-        //#region Intialize_Original
+        #region Intialize_Original
         //public bool Initialize(string bookDataFilePath)
         //{
         //    try
@@ -175,7 +179,7 @@ namespace Seneca
         //        return false;
         //    }
         //}
-        //#endregion
+        #endregion
 
         public bool Initialize(string bookDataFilePath)
         {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualBasic.FileIO;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -106,10 +107,25 @@ namespace Seneca
         }
 
 
-        //public bool WriteFile(string fielPath, FileWriteMode fileWriteModes)
-        //{
-
-        //}
+        public bool WriteFile(string filePath, FileWriteModes fileWriteMode)
+        {
+            if(!File.Exists(filePath))
+            {
+                File.Create(filePath);
+                using (StreamWriter sw = File.CreateText(filePath))
+                {
+                    sw.WriteLine("Hello");
+                    sw.WriteLine("And");
+                    sw.WriteLine("Welcome");
+                }
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("File found");
+                return false;
+            }
+        }
         //public bool DeleteFile(string filePath)
         //{
 
