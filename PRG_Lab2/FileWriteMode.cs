@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace Seneca
 {
-    public class FileWriteModes
+    public enum FileWriteModes
     {
-        public enum FileWriteMode
-        {
-            Append,
-            Overwrite
-        }
+        Append,
+        Overwrite
     }
+    
 }

@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace Seneca
 {
-    public class FileManager
+    public static class FileManager
     {
         //Field/Attributes
 
-        public List<string> ReadFile(string filePath)
+        public static List<string> ReadFile(string filePath)
         {
             List<string> lines = new List<string>();
             using (StreamReader reader = new StreamReader(filePath))
@@ -29,7 +29,7 @@ namespace Seneca
                         continue;
                     }
                     //string[] columns = Line.Split(',');
-                    List<string> columns = SplitCSVLine(Line);
+                    List<string> columns = splitForLines(Line);
                     string formattedLine = string.Join(",", columns);
                     lines.Add(formattedLine);
                     //Console.WriteLine(columns[1]);
@@ -63,51 +63,39 @@ namespace Seneca
         //    return lines;
         //}
 
-        private List<string> SplitCSVLine(string line)
+        private static List<string> splitForLines(string line)
         {
             List<string> columns = new List<string>();
+            //string columnBuilder = "";
+
             StringBuilder columnBuilder = new StringBuilder();
             bool inQuotes = false;
 
-            foreach (char c in line)
+            foreach (char character in line)
             {
-                if (c == '"')
+                if (character == '"')
                 {
                     inQuotes = !inQuotes;
                     columnBuilder.Append('"');
                 }
-                else if (c == ',' && !inQuotes)
+                else if (character == ',' && !inQuotes)
                 {
                     columns.Add(columnBuilder.ToString().Trim());
                     columnBuilder.Clear();
                 }
                 else
                 {
-                    columnBuilder.Append(c);
+                    columnBuilder.Append(character);
                 }
             }
 
             columns.Add(columnBuilder.ToString().Trim());
 
-            //// Combine the columns that belong to the same cell enclosed in quotes
-            //if (inQuotes)
-            //{
-            //    int startIndex = columns.Count - 2;
-            //    int endIndex = columns.Count - 1;
-
-            //    if (startIndex >= 0 && endIndex >= 0)
-            //    {
-            //        string combinedValue = string.Join(",", columns.GetRange(startIndex, endIndex - startIndex + 1));
-            //        columns.RemoveRange(startIndex, endIndex - startIndex + 1);
-            //        columns.Add(combinedValue);
-            //    }
-            //}
-
             return columns;
         }
 
 
-        public bool WriteFile(string filePath, FileWriteModes fileWriteMode)
+        public static bool WriteFile(string filePath, FileWriteModes fileWriteMode)
         {
             DateTime currentDateTime = DateTime.Now;
             if (!File.Exists(filePath))
@@ -139,7 +127,7 @@ namespace Seneca
             }
            
         }
-        public bool DeleteFile(string filePath)
+        public static bool DeleteFile(string filePath)
         {
             if (File.Exists(filePath))
             {

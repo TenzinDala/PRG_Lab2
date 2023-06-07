@@ -43,15 +43,16 @@ namespace Seneca
         public bool BorrowBook(Book book)
         {
             string TEXT_NAME = book.GetISBN();
-            string path = $@"D:\PRG\Lab03\{TEXT_NAME}.txt";
-            FileManager textFile = new FileManager();
-            FileWriteModes fileWriteModes = new FileWriteModes();
+            string path = Directory.GetCurrentDirectory();
+            string filePath = System.IO.Path.Combine(path, $"{TEXT_NAME}.txt");
+            //string path = $@"D:\PRG\Lab03\{TEXT_NAME}.txt";
+            //FileManager textFile = new FileManager();
             try
             {
                 if (!book.borrowStatus)
                 {
                     book.borrowStatus = true;
-                    textFile.WriteFile(path, fileWriteModes);
+                    FileManager.WriteFile(filePath, FileWriteModes.Append);
                     Console.WriteLine("Book successfully borrowed.");
                     return true;
                 }
@@ -110,8 +111,8 @@ namespace Seneca
                     columnLines = new List<string>();
 
                     allBooks = new List<Book>(); // Initialize the allBooks list
-                    FileManager fileManager = new FileManager();
-                    columnLines = fileManager.ReadFile(bookDataFilePath);
+                    //FileManager fileManager = new FileManager(); //Not required since the class is now Static
+                    columnLines = FileManager.ReadFile(bookDataFilePath);
 
 
 
@@ -121,7 +122,7 @@ namespace Seneca
                 foreach (string line in columnLines)
                 {
 
-                    List<string> columns = SplitCSVLine(line);
+                    List<string> columns = splitForLines(line);
                     string isbn = columns[0];
                     string Title = columns[1];
                     string authorName = columns[2];
@@ -186,26 +187,24 @@ namespace Seneca
         }
 
 
-        private List<string> SplitCSVLine(string line)
+        private List<string> splitForLines(string line)
         {
             List<string> columns = new List<string>();
             StringBuilder columnBuilder = new StringBuilder();
             bool inQuotes = false;
 
-            foreach (char c in line)
+            foreach (char character in line)
             {
-                if (c == '"')
-                {
-                    inQuotes = !inQuotes;
-                }
-                else if (c == ',' && !inQuotes)
+                if (character == '"') { inQuotes = !inQuotes; }
+
+                else if (character == ',' && !inQuotes)
                 {
                     columns.Add(columnBuilder.ToString().Trim());
                     columnBuilder.Clear();
                 }
                 else
                 {
-                    columnBuilder.Append(c);
+                    columnBuilder.Append(character);
                 }
             }
 
