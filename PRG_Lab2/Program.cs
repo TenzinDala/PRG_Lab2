@@ -93,7 +93,9 @@ namespace Seneca
             //############################### Lab 3 Assignment ################################
 
             Library testLibrary = new Library();
-            string filePath = @"D:\PRG\Lab03\BookData.csv";
+            string path = Directory.GetCurrentDirectory();
+            string filePath = System.IO.Path.Combine(path, "BookData.csv");
+            //string filePath = @"D:\PRG\Lab03\BookData.csv";
             testLibrary.Initialize(filePath);
 
             //Creating a history class and adding it to the Library
@@ -173,11 +175,44 @@ namespace Seneca
                 Console.WriteLine(GenreTypeSearch.GetGenre());
                 Console.WriteLine(GenreTypeSearch.GetISBN());
             }
+
+            //Console.WriteLine("Enter a key to delete the borrowed files!!!");
+            //Console.ReadLine();
+
+            //Library testDeleteFile = new Library();
+            //List<Book> borrowed = testDeleteFile.BorrowedBooks();
+            //foreach (var borrow in borrowed)
+            //{
+            //    Console.WriteLine($"{borrow.GetISBN()} ISBN getting Deleted!!!");
+
+            //}
+            //List<string> TEXT_NAME = new List<string>();
+            //TEXT_NAME.Add("123");
+            //TEXT_NAME.Add("125");
+            //foreach (string text in TEXT_NAME)
+            //{
+            //    string deletePath = Directory.GetCurrentDirectory();
+            //    string deleteFilePath = System.IO.Path.Combine(deletePath, $"{text}.txt");
+
+
+
+            //    FileManager deleteFile = new FileManager();
+            //    deleteFile.DeleteFile(deleteFilePath);
+            //}
+
+
+
+
+
+            //Checking filepath
+            //string strExeFilePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+
+
             AppDomain.CurrentDomain.ProcessExit += OnProcessExit; // Register the event handler
 
         }
 
-        //############################## This Section will execute every time the Program Ends ##########################
+//############################## This Section will execute every time the Program Ends ##########################
 
         static void OnProcessExit(object sender, EventArgs e)
         {
@@ -194,18 +229,20 @@ namespace Seneca
             List<string> TEXT_NAME = new List<string>();
             TEXT_NAME.Add("123");
             TEXT_NAME.Add("125");
-            foreach(string text in TEXT_NAME) 
+            foreach (string text in TEXT_NAME)
             {
-                string filePath = $@"D:\PRG\Lab03\{text}.txt";
+                string path = Directory.GetCurrentDirectory();
+                string filePath = System.IO.Path.Combine(path, $"{text}.txt");
 
 
-                FileManager deleteFile = new FileManager();
-                deleteFile.DeleteFile(filePath);
+
+                //FileManager deleteFile = new FileManager();
+                FileManager.DeleteFile(filePath);
             }
 
-          
 
-          
+
+
 
 
         }
@@ -215,17 +252,19 @@ namespace Seneca
 /*
 To DO
 
-1) Make changes to the Author author input
-2) Ask For Validations in the file reading  
-3) Just Skip or return False?
-4) How to validate Author Email and name since the parameter has changed
-5) Should Book now need a constructor?
-6) How is this book being called?
-7) Will the attributes be already defined?
-
-Q.1. Should we change the return for Author?
+Q.1. How would you use static in File Manager?
 
 Q.2. Where would you like us to create the txt file?
+
+Q.3. How to use File Write Mode class?
+
+To do  -
+
+1) Use Append and Override Logic
+2) Add Class instead of Static
+3) txt file has to be in the executable
+4) Add Genre.Unknown
+5) Add Unknown for the Genre Logic
  
 */
 
