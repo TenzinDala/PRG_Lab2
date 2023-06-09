@@ -41,27 +41,6 @@ namespace Seneca
 
         }
 
-        //public List<string> ReadFile(string filePath)
-        //{
-        //    List<string> lines = new List<string>();
-
-        //    using (TextFieldParser parser = new TextFieldParser(filePath))
-        //    {
-        //        parser.TextFieldType = FieldType.Delimited;
-        //        parser.SetDelimiters(",");
-        //        parser.HasFieldsEnclosedInQuotes = true;
-        //        parser.ReadLine();
-
-        //        while (!parser.EndOfData)
-        //        {
-        //            string[] fields = parser.ReadFields();
-        //            string line = string.Join(",", fields);
-        //            lines.Add(line);
-        //        }
-        //    }
-
-        //    return lines;
-        //}
 
         private static List<string> splitForLines(string line)
         {
@@ -98,32 +77,18 @@ namespace Seneca
         public static bool WriteFile(string filePath, FileWriteModes fileWriteMode)
         {
             DateTime currentDateTime = DateTime.Now;
-            if (!File.Exists(filePath))
+            if (fileWriteMode == FileWriteModes.Overwrite)
             {
                 File.Create(filePath).Dispose();
                 File.AppendAllText(filePath, currentDateTime.ToString());
                 return true;
-                //try
-                //{
-                //    using (StreamWriter sw = File.CreateText(filePath))
-                //    {
-                //        sw.WriteLine($"Date And Time");
-                //        sw.WriteLine($"{currentDateTime}");
-                //        sw.WriteLine("Welcome");
-                //    }
-                //    return true;
-                //}
-                //catch (Exception e)
-                //{
-                //    Console.WriteLine(e.Message);
-                //    return false;
-                //}
 
             }
             else
             {
-                Console.WriteLine("File found");
-                return false;
+                File.AppendAllText(filePath, "\n");
+                File.AppendAllText(filePath, currentDateTime.ToString());
+                return true;
             }
            
         }
