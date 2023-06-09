@@ -52,7 +52,14 @@ namespace Seneca
                 if (!book.borrowStatus)
                 {
                     book.borrowStatus = true;
-                    FileManager.WriteFile(filePath, FileWriteModes.Append);
+                    if(File.Exists(filePath))
+                    {
+                        FileManager.WriteFile(filePath, FileWriteModes.Append);
+                    }
+                    else
+                    {
+                        FileManager.WriteFile(filePath, FileWriteModes.Overwrite);
+                    }
                     Console.WriteLine("Book successfully borrowed.");
                     return true;
                 }
@@ -153,13 +160,6 @@ namespace Seneca
 
                 }
 
-                    
-                    //Console.WriteLine("This is the Old ISBN");
-                    //foreach (var isbnOld in isbnCheckList)
-                    //{
-                    //    Console.WriteLine(isbnOld.ToString());
-                    //}
-                    //List<string> finalISBNCheck = isbnCheckList.Distinct().ToList();
                     Console.WriteLine("This is the New ISBN");
 
                     foreach (var isbnNew in ISBNList)
@@ -167,14 +167,16 @@ namespace Seneca
                         Console.WriteLine(isbnNew.ToString());
                     }
                     Console.WriteLine("\nAll Books Check !!!\n");
-                    foreach (var bookTest in allBooks)
-                    {
-                        Console.WriteLine("isbn is : " + bookTest.GetISBN());
-                        Console.WriteLine("Year is : " + bookTest.GetYear());
-                        Console.WriteLine("Genre is :" + bookTest.GetGenre());
-                        Console.WriteLine("Author is : " + bookTest.GetAuthor().GetName());
-                        Console.WriteLine("AvailableCopies are : " + bookTest.GetAvailableCopies());
-                        Console.WriteLine("Audio is : " + bookTest.GetisAudio());
+                foreach (var bookTest in allBooks)
+                {
+                    Console.WriteLine($"isbn is :  {bookTest.GetISBN()}");
+                    Console.WriteLine($"Year is : {bookTest.GetYear()}");
+                    Console.WriteLine($"Year is : {bookTest.GetTitle()}");
+
+                    //Console.WriteLine("Genre is :" + bookTest.GetGenre());
+                    Console.WriteLine($"Author is : {bookTest.GetAuthor().GetName()}");
+                        Console.WriteLine($"AvailableCopies are : {bookTest.GetAvailableCopies()}");
+                        Console.WriteLine($"Audio is :  {bookTest.GetisAudio()}\n");
                     }
                 
                 return true;
@@ -210,43 +212,6 @@ namespace Seneca
 
             columns.Add(columnBuilder.ToString().Trim());
             return columns;
-
-            //// Merge columns that belong to the same cell enclosed in quotes
-            //List<string> mergedColumns = new List<string>();
-            //StringBuilder mergedColumnBuilder = new StringBuilder();
-            //bool mergeInProgress = false;
-
-            //foreach (string column in columns)
-            //{
-            //    if (!mergeInProgress && column.StartsWith("\""))
-            //    {
-            //        if (column.EndsWith("\""))
-            //        {
-            //            mergedColumns.Add(column.Trim('\"'));
-            //        }
-            //        else
-            //        {
-            //            mergedColumnBuilder.Clear();
-            //            mergedColumnBuilder.Append(column.Trim('\"'));
-            //            mergeInProgress = true;
-            //        }
-            //    }
-            //    else if (mergeInProgress)
-            //    {
-            //        mergedColumnBuilder.Append("," + column);
-            //        if (column.EndsWith("\""))
-            //        {
-            //            mergedColumns.Add(mergedColumnBuilder.ToString());
-            //            mergeInProgress = false;
-            //        }
-            //    }
-            //    else
-            //    {
-            //        mergedColumns.Add(column);
-            //    }
-            //}
-
-            //return mergedColumns;
         }
 
         public bool ReturnBook(Book book)
